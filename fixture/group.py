@@ -46,3 +46,14 @@ class GroupHelper:
         Keyboard.Instance.PressSpecialKey(KeyboardInput.SpecialKeys.RETURN)
         self.close_group_editor(modal)
         self.group_cache = None
+
+    def delete_group_by_index(self, main_window, index):
+        group = self.open_group_editor(main_window)
+        tree = group.Get(SearchCriteria.ByAutomationId("uxAddressTreeView"))
+        root = tree.Nodes[0]
+        root.Nodes[index].Select()
+        group.Get(SearchCriteria.ByAutomationId("uxDeleteAddressButton")).Click()
+        delete_group = group.ModalWindow("Delete group")
+        delete_group.Get(SearchCriteria.ByAutomationId("uxOKAddressButton")).Click()
+        self.close_group_editor(group)
+        self.group_cache = None
