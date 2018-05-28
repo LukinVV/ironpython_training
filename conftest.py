@@ -1,5 +1,6 @@
 import pytest
 import os.path
+import json
 from fixture.application import ApplicationHelper
 import clr
 
@@ -8,13 +9,14 @@ clr.AddReferenceByName(
 from Microsoft.Office.Interop import Excel
 
 fixture = None
-
+target = None
 
 @pytest.fixture()
 def app(request):
     global fixture
+    web_config = load_config(request.config.getoption("--target"))
     if fixture is None:
-        fixture = ApplicationHelper()
+        fixture = ApplicationHelper(web_config["app_path"])
     return fixture
 
 
@@ -25,6 +27,7 @@ def stop(request):
 
     request.addfinalizer(fin)
     return fixture
+
 
 
 def load_from_xlsx(f):
@@ -46,3 +49,15 @@ def pytest_generate_tests(metafunc):
         if fixture.startswith("xlsx_"):
             testdata = load_from_xlsx(fixture[5:])
             metafunc.parametrize(fixture, testdata, ids=[str(x) for x in testdata])
+
+
+def load_config(conf):
+    global target
+    if target is None:
+        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), conf)
+        with open(config_file) as f:
+            target = json.load(f)
+    return target
+
+def pytest_addoption(parser):
+    parser.addoption("--target", action="store", default="target.json")

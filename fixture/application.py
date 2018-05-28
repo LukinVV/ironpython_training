@@ -19,9 +19,9 @@ from fixture.group import GroupHelper
 
 class ApplicationHelper:
 
-    def __init__(self):
+    def __init__(self, app_path):
         self.group = GroupHelper(self)
-        self.application = Application.Launch("C:\\FreeAddressBook\\AddressBook.exe")
+        self.application = Application.Launch(app_path)
         self.main_window = self.application.GetWindow('Free Address Book')
 
     def close_app(self):
