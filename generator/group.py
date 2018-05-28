@@ -7,8 +7,9 @@ import time
 from model.group import Group
 
 import clr
-clr.AddReferenceByName('Microsoft.Office.Interop.Excel, Version=15.0.0.0, '
-                       'Culture=neutral, PublicKeyToken=71e9bce111e9429c')
+
+clr.AddReferenceByName(
+    'Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c')
 from Microsoft.Office.Interop import Excel
 
 try:
@@ -33,8 +34,7 @@ def random_string(prefix, max_len):
 
 
 # testdata
-test_data = [Group(name="")] + [Group(name=random_string('name', 10))  for i in range(n)]
-
+test_data = [Group(name="")] + [Group(name=random_string('name', 10)) for i in range(n)]
 
 file = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', f)
 data = os.path.exists("..\data")
@@ -44,17 +44,11 @@ if data is False:
 elif datafile is True:
     os.remove(file)
 
-
 excel = Excel.ApplicationClass()
 excel.Visible = True
-
 workbook = excel.Workbooks.Add()
 sheet = workbook.ActiveSheet
-
-for i in range (len(test_data)):
-    sheet.Range["A%s" % (i+1)].Value2 = test_data[i].name
-
+for i in range(len(test_data)):
+    sheet.Range["A%s" % (i + 1)].Value2 = test_data[i].name
 workbook.SaveAs(file)
-
-time.sleep(2)
 excel.Quit()

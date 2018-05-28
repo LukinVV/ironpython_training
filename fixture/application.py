@@ -1,6 +1,7 @@
 import clr
 import sys
 import os.path
+
 project_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 sys.path.append(os.path.join(project_dir, "TestStack.White.0.13.3\\lib\\net40\\"))
 sys.path.append(os.path.join(project_dir, "Castle.Core.3.3.0\\lib\\net40-client\\"))
@@ -22,7 +23,6 @@ class ApplicationHelper:
         self.group = GroupHelper(self)
         self.application = Application.Launch("C:\\FreeAddressBook\\AddressBook.exe")
         self.main_window = self.application.GetWindow('Free Address Book')
-
 
     def close_app(self):
         self.main_window.Get(SearchCriteria.ByAutomationId("uxExitAddressButton")).Click()
